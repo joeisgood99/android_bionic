@@ -27,6 +27,8 @@ LOCAL_CFLAGS := -Wall -Wextra -Wunused -Werror
 LOCAL_MODULE := libdl
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 
+LOCAL_NO_LTO_SUPPORT := true
+
 # NOTE: libdl needs __aeabi_unwind_cpp_pr0 from libgcc.a but libgcc.a needs a
 # few symbols from libc. Using --no-undefined here results in having to link
 # against libc creating a circular dependency which is removed and we end up
@@ -36,3 +38,25 @@ LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
 LOCAL_SYSTEM_SHARED_LIBRARIES :=
 
 include $(BUILD_SHARED_LIBRARY)
+
+BUILD_DLTEST:=0
+ifeq ($(BUILD_DLTEST),1)
+
+#
+# dltest
+#
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:= dltest.c
+
+LOCAL_MODULE:= dltest
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
+
+LOCAL_SHARED_LIBRARIES := libdl
+
+LOCAL_NO_LTO_SUPPORT := true
+
+include $(BUILD_EXECUTABLE)
+
+endif
